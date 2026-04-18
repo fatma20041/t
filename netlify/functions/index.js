@@ -182,12 +182,14 @@ ${customInfoText}
             `
         };
 
-        transporter.sendMail(mailOptions).catch(err => console.error("Mail Error:", err));
-    } catch (err) {
-        console.error("Order processing error:", err);
-    }
+ transporter.sendMail(mailOptions, (error, info) => {
+  if (error) {
+    console.log("رصيد الخطأ هنا يا كوكو:", error); // السطر ده هو اللي هيعرفنا العيب فين
+    return res.status(500).send(error.toString());
+  }
+  console.log("الإيميل اتبعت بنجاح!");
+  res.status(200).send('Email sent: ' + info.response);
 });
-
 // ---------------------------------------------------
 // 8. CONTACT
 // ---------------------------------------------------
