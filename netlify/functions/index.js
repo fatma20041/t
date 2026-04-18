@@ -44,7 +44,7 @@ const transporter = nodemailer.createTransport({
     secure: true,
     auth: {
         user: 'nap.egy.store@gmail.com',
-        pass: 'ovov fbwh nhwx mqyv'
+        pass: hdkn hdbc hgkc higi
     },
     tls: {
         rejectUnauthorized: false
