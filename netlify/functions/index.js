@@ -14,12 +14,6 @@ app.use(cors());
 app.use(express.json({ limit: '100mb' })); 
 app.use(express.urlencoded({ limit: '100mb', extended: true }));
 
-// ✅ تم تعطيل السطور التالية لأن Vercel يتعامل مع الملفات الثابتة من المجلد الرئيسي مباشرة
-// app.use(express.static(__dirname));
-// app.get('/', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'index.html'));
-// });
-
 const upload = multer({ storage: multer.memoryStorage() });
 
 // ---------------------------------------------------
@@ -30,7 +24,7 @@ const dbURI = 'mongodb+srv://admin:nap123@cluster0.l7barrw.mongodb.net/NAP_DB';
 mongoose.connect(dbURI)
   .then(() => {
       console.log('Connected to NAP Database! ✅');
-      if (typeof seedProducts === "function") seedProducts(); 
+      seedProducts(); 
   })
   .catch((err) => console.log('Database Connection Error ❌:', err));
 
@@ -44,7 +38,7 @@ const transporter = nodemailer.createTransport({
     secure: true,
     auth: {
         user: 'nap.egy.store@gmail.com',
-        pass: onla xjca oosb hezd
+        pass: 'onla xjca oosb hezd' // تم التصليح هنا بوضع علامات التنصيص
     },
     tls: {
         rejectUnauthorized: false
@@ -136,8 +130,6 @@ app.post('/api/place-order', async (req, res) => {
         const data = req.body;
         const { customer, payment, cart_items, total, custom_designs } = data;
 
-        res.status(200).json({ status: 'success' });
-
         let attachments = [];
         let customInfoText = "";
 
@@ -182,27 +174,38 @@ ${customInfoText}
             `
         };
 
- transporter.sendMail(mailOptions, (error, info) => {
-  if (error) {
-    console.log("رصيد الخطأ هنا يا كوكو:", error); // السطر ده هو اللي هيعرفنا العيب فين
-    return res.status(500).send(error.toString());
-  }
-  console.log("الإيميل اتبعت بنجاح!");
-  res.status(200).send('Email sent: ' + info.response);
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log("رصيد الخطأ هنا يا كوكو:", error);
+                return res.status(500).json({ error: error.toString() });
+            }
+            console.log("الإيميل اتبعت بنجاح!");
+            return res.status(200).json({ message: 'Order placed and email sent!' });
+        });
+
+    } catch (err) {
+        console.error("Order Error:", err);
+        res.status(500).json({ message: "Order processing failed" });
+    }
 });
+
 // ---------------------------------------------------
 // 8. CONTACT
 // ---------------------------------------------------
 app.post('/api/contact', (req, res) => {
     const { name, email, phone, comment } = req.body;
-    res.status(200).json({ status: 'success' });
     const mailOptions = {
         from: 'nap.egy.store@gmail.com',
         to: 'nap.egy.store@gmail.com',
         subject: `📩 Contact Form: ${name}`,
         text: `Customer: ${name}\nEmail: ${email}\nPhone: ${phone}\nMessage: ${comment}`
     };
-    transporter.sendMail(mailOptions).catch(err => console.error("Contact Mail Error:", err));
+    transporter.sendMail(mailOptions)
+        .then(() => res.status(200).json({ status: 'success' }))
+        .catch(err => {
+            console.error("Contact Mail Error:", err);
+            res.status(500).json({ status: 'error' });
+        });
 });
 
 // ---------------------------------------------------
@@ -213,7 +216,7 @@ app.get('/api/products', async (req, res) => {
         const products = await Product.find();
         res.json(products);
     } catch (err) {
-        res.status(500).json({ message: "Error" });
+        res.status(500).json({ message: "Error fetching products" });
     }
 });
 
@@ -230,6 +233,6 @@ async function seedProducts() {
 }
 
 // ---------------------------------------------------
-// التصدير لـ Vercel
+// التصدير لـ Netlify
 // ---------------------------------------------------
 module.exports.handler = serverless(app);
