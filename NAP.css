@@ -2380,3 +2380,90 @@ input[type="email"], input[type="text"], input[type="tel"] {
         margin-bottom: 20px;
     }
 }
+/* ======================================================
+   قسم الإصلاح الشامل لكل الأجهزة (Responsive Fixes)
+   ضيفي الكود ده في آخر ملف NAP.css عندك
+   ====================================================== */
+
+@media (max-width: 1024px) {
+    /* 1. إصلاح الهيدر واللوجو */
+    .header-wrapper {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 15px;
+    }
+    .nav-area, .icons-area { padding-top: 10px !important; }
+    .main-logo { height: 70px !important; }
+    .logo-area { transform: none !important; }
+
+    /* 2. إصلاح الجريد (المنتجات والكوليكشنز) */
+    .collections-grid, .products-grid, .category-page .products-grid {
+        grid-template-columns: repeat(2, 1fr) !important; /* اتنين في السطر */
+        gap: 15px !important;
+        width: 100% !important;
+    }
+
+    /* 3. إصلاح الصفحات الجانبية (التشيك أوت والحساب) */
+    .checkout-layout, .account-container {
+        grid-template-columns: 1fr !important; /* خليهم عمود واحد */
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    .checkout-summary-side {
+        order: -1 !important; /* ملخص الطلب يطلع فوق */
+        border-left: none !important;
+        padding: 20px !important;
+    }
+    .checkout-form-side { padding: 20px !important; }
+}
+
+@media (max-width: 768px) {
+    /* 4. إصلاح النصوص الكبيرة (الهيرو) */
+    .hero-content h1 {
+        font-size: 35px !important;
+        line-height: 1.2 !important;
+    }
+    .hero-section { height: 60vh !important; }
+
+    /* 5. إصلاح الفورم (الكونتكت و الكستمايز) */
+    .form-row, .account-form .form-row {
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+    .options-grid {
+        grid-template-columns: 1fr !important; /* خيارات الـ Fit تحت بعض */
+    }
+    .customize-container, .contact-container, .auth-box {
+        width: 95% !important;
+        padding: 15px !important;
+    }
+
+    /* 6. إصلاح الفوتر */
+    .footer-container {
+        flex-direction: column !important;
+        text-align: center !important;
+        gap: 30px !important;
+    }
+    .footer-section { min-width: 100% !important; }
+    .footer-bottom { margin-top: 40px !important; }
+}
+
+@media (max-width: 480px) {
+    /* للموبايلات الصغيرة جداً */
+    .collections-grid, .products-grid {
+        grid-template-columns: 1fr !important; /* منتج واحد في السطر */
+    }
+    .nav-area ul {
+        gap: 10px !important;
+    }
+    .nav-area ul li a {
+        font-size: 10px !important;
+    }
+}
+
+/* قاعدة ذهبية عشان مفيش صورة تخرج برا الشاشة */
+img {
+    max-width: 100% !important;
+    height: auto !important;
+}
