@@ -2367,3 +2367,16 @@ input[type="email"], input[type="text"], input[type="tel"] {
     padding-left: 35px; /* حركة بسيطة لليمين عند الهوفر */
     color: #4CAF50;
 }
+/* ده الكود العادي للكمبيوتر */
+.product-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+/* ده الكود للموبايل */
+@media (max-width: 600px) {
+    .product-card {
+        width: 100%; /* المنتج ياخد عرض الشاشة كلها */
+        margin-bottom: 20px;
+    }
+}
